@@ -3,7 +3,7 @@ name: PnL Dashboard Cron Job
 on:
   schedule:
     # Run at the 15th and 50th minute of every hour
-    - cron: '05,55 * * * *'
+    - cron: '05,20,55 * * * *'
   workflow_dispatch:  # Allow manual triggering
 
 jobs:
