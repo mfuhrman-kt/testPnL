@@ -22,7 +22,31 @@ def query_pnl_data():
     try:
         response = requests.get(API_URL, headers=HEADERS)
         response.raise_for_status()
-        return response.json()
+        data = response.json()
+        
+        # Print full response structure/details
+        print("=" * 80)
+        print("FULL RESPONSE DETAILS:")
+        print("=" * 80)
+        print(f"Response type: {type(data)}")
+        print(f"Response keys: {list(data.keys()) if isinstance(data, dict) else 'Not a dict'}")
+        
+        # Print all top-level keys and their types/values
+        if isinstance(data, dict):
+            for key, value in data.items():
+                if key == "results":
+                    print(f"\n{key}: (array with {len(value) if isinstance(value, list) else 'unknown'} items)")
+                else:
+                    print(f"{key}: {value} (type: {type(value).__name__})")
+        
+        # Print response as JSON for full visibility
+        print("\n" + "=" * 80)
+        print("FULL RESPONSE JSON:")
+        print("=" * 80)
+        print(json.dumps(data, indent=2, default=str))
+        print("=" * 80)
+        
+        return data
     except requests.exceptions.RequestException as e:
         print(f"Error querying API: {e}")
         return None
@@ -47,8 +71,6 @@ def calculate_pnl_statistics(data):
         if kt_pnl_1_back is None:
             kt_pnl_1_back = result.get("current_cumulative_pnl", 0.0)
         elif kt_pnl_1_back == 0.0:
-            # If kt_pnl_1_back is explicitly 0, we still want to use current_cumulative_pnl
-            # Actually, wait - if it's 0.0, that's a valid value, not missing
             pass
         
         # Convert None to 0.0 if it's still None
