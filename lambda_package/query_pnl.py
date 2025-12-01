@@ -43,7 +43,7 @@ def query_pnl_data():
         print("\n" + "=" * 80)
         print("FULL RESPONSE JSON:")
         print("=" * 80)
-        print(json.dumps(data, indent=2, default=str))
+        print(json.dumps(data["results"][:15], indent=2, default=str))
         print("=" * 80)
         
         return data
